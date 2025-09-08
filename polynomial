@@ -1,0 +1,50 @@
+import java.math.BigInteger;
+
+public class ConstantTermCalculator {
+
+    // Converts a value from the given base to decimal using BigInteger
+    public static BigInteger toDecimal(String value, int base) {
+        return new BigInteger(value, base);
+    }
+
+    // Calculates the constant term (c) of the polynomial with given roots
+    public static BigInteger calculateConstant(BigInteger[] roots) {
+        // For monic polynomial, constant term is product of (-1)^k * r1 * r2 * ... * rk
+        BigInteger result = BigInteger.ONE;
+        for (BigInteger root : roots) {
+            result = result.multiply(root);
+        }
+
+        // Apply sign based on number of roots (even: +, odd: -)
+        if (roots.length % 2 != 0) {
+            result = result.negate();
+        }
+
+        return result;
+    }
+
+    public static void main(String[] args) {
+        // Input from second test case, first 7 roots only (k = 7)
+        String[][] inputs = {
+                {"6",  "13444211440455345511"},
+                {"15", "aed7015a346d635"},
+                {"15", "6aeeb69631c227c"},
+                {"16", "e1b5e05623d881f"},
+                {"8",  "316034514573652620673"},
+                {"3",  "2122212201122002221120200210011020220200"},
+                {"3",  "20120221122211000100210021102001201112121"}
+        };
+
+        BigInteger[] roots = new BigInteger[inputs.length];
+        for (int i = 0; i < inputs.length; i++) {
+            int base = Integer.parseInt(inputs[i][0]);
+            String value = inputs[i][1];
+            roots[i] = toDecimal(value, base);
+        }
+
+        BigInteger constant = calculateConstant(roots);
+
+        // Output only the constant term
+        System.out.println(constant);
+    }
+}
