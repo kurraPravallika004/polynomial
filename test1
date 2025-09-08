@@ -1,0 +1,40 @@
+import java.math.BigInteger;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
+public class PolynomialConstantTerm_TC1 {
+
+    public static BigInteger toDecimal(String value, int base) {
+        return new BigInteger(value.toLowerCase(), base);
+    }
+
+    public static BigInteger computeConstant(Map<String, String[]> roots, int k) {
+        BigInteger result = BigInteger.ONE;
+        int count = 0;
+
+        for (Map.Entry<String, String[]> entry : roots.entrySet()) {
+            if (count >= k) break;
+            int base = Integer.parseInt(entry.getValue()[0]);
+            String value = entry.getValue()[1];
+            BigInteger root = toDecimal(value, base);
+            result = result.multiply(root);
+            count++;
+        }
+
+        if (k % 2 != 0) result = result.negate();
+        return result;
+    }
+
+    public static void main(String[] args) {
+        int k = 3;
+        Map<String, String[]> roots = new LinkedHashMap<>();
+        roots.put("1", new String[]{"10", "4"});
+        roots.put("2", new String[]{"2", "111"});
+        roots.put("3", new String[]{"10", "12"});
+        roots.put("6", new String[]{"4", "213"}); // extra, ignored
+
+        System.out.println(computeConstant(roots, k));
+    }
+}
+
+
